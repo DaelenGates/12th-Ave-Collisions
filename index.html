@@ -1,0 +1,113 @@
+<html>
+<head>
+  <style>
+	body{
+		font-family: sans-serif;
+		/* max-width: 900px; */
+		margin: auto;
+    background-color: gray;
+	}
+  #map {
+  width: 100%;
+  height: 80%;
+}
+	</style>
+
+  <title> Daelen's Lab 4 </title>
+  <!-- input the Leaflet CSS -->
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+	<!-- input the Leaflet JavaScript library -->
+	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <!-- Leaflet.markercluster CSS links -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css"/>
+  <!-- Leaflet.markercluster JS link -->
+  <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+  <!-- input of the leflet legend api if needed -->
+  <link rel="stylesheet" href="leaflet.legend.css" />
+	<script src="leaflet.legend.js"></script>
+</head>
+
+<body>
+  <!-- title  -->
+  <h1>12th Ave Collisons Involving Cycalist or Pedestrian 2004-2022 </h1>
+  <!-- this div creates the hold for hte map -->
+  <div id="map" style="height: 95%"></div>
+  <!-- This script loads the bike data -->
+  <script type="text/javascript" src="bikeRacks2.js"></script>
+  <!-- This script loads in the cycleist collison data  -->
+  <script type="text/javascript" src="CycleColShp.js"></script>
+  <!-- This Scrip loads in the Pedestrain Collision data  -->
+  <script type="text/javascript" src="PedColShp.js"></script>
+  <!-- This is where the map is built and made funcitonal  -->
+  <script>
+    var mymap = L.map('map').setView([47.608023,-122.317010],14);
+    // Base map is added here change if needed
+    var basemap = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(mymap);
+    // adds custom Bike marker to Leaflet
+    var bike = L.icon({
+      iconUrl: 'Bike.png',
+
+      iconSize:     [38, 95] // size of the icon
+      // shadowSize:   [50, 64], // size of the shadow
+      // iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+      // shadowAnchor: [4, 62],  // the same for the shadow
+      // popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+    });
+    // Add in custom Pedestrian marker to leaflet
+    var Ped = L.icon({
+      iconUrl: 'Ped.png',
+
+      iconSize:     [38, 95] // size of the icon
+      // shadowSize:   [50, 64], // size of the shadow
+      // iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
+      // shadowAnchor: [4, 62],  // the same for the shadow
+      // popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+    });
+      // Adding in the cycle colision data as a variable so it can be clustered later 
+    var cycleCol = L.geoJson(data2, {
+    pointToLayer: function(feature, latlng){
+      var marker = L.marker(latlng, {icon: bike});
+      marker.bindPopup("Cycalist Collison Count: " + feature.properties.PEDCYLCOUN + "<br>Vehicle Count: " + feature.properties.VEHCOUNT + "<br>Details: " + feature.properties.SDOT_COLDE + "<br>" + feature.properties.ST_COLDESC + "<br>Date: " + feature.properties.INCDATE);
+      return marker;
+      }
+    });
+    // Adding in the pedestrian collision data as a variable so it can be custerd later 
+    var pedCol = L.geoJson(data3, {
+      pointToLayer: function(feature, latlng){
+        var marker = L.marker(latlng, {icon: Ped});
+        marker.bindPopup("Cycalist Collison Count: " + feature.properties.PEDCOUNT + "<br>Vehicle Count: " + feature.properties.VEHCOUNT + "<br>Details: " + feature.properties.SDOT_COLDE + "<br>" + feature.properties.ST_COLDESC + "<br>Date: " + feature.properties.INCDATE);
+        return marker;
+      }
+    });
+    
+    // this is the use of the cluster points method
+    var clusters = L.markerClusterGroup({showCoverageOnHover: false});
+    clusters.addLayer(cycleCol);
+    clusters.addLayer(pedCol);
+    mymap.addLayer(clusters);
+
+    var Legend = L.control.legend({
+      position:"bottomright",
+      opacity: 0.6,
+      legends:[
+        {
+          label:"Bike Collision",
+          type: "image",
+          url: "Bike.png",
+          fillOpacity: "1"
+        },
+        {
+          label:"Pedestrian Collison",
+          type: "image",
+          url: "Ped.png",
+          fillOpacity: "1"
+        }
+      ]
+    }).addTo(mymap);
+    
+    </script>
+</body>
+</html>
