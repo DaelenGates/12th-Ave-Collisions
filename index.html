@@ -70,7 +70,7 @@
     var cycleCol = L.geoJson(data2, {
     pointToLayer: function(feature, latlng){
       var marker = L.marker(latlng, {icon: bike});
-      marker.bindPopup("Cycalist Collison Count: " + feature.properties.PEDCYLCOUN + "<br>Vehicle Count: " + feature.properties.VEHCOUNT + "<br>Details: " + feature.properties.SDOT_COLDE + "<br>" + feature.properties.ST_COLDESC + "<br>Date: " + feature.properties.INCDATE);
+      marker.bindPopup("Cyclist Collison Count: " + feature.properties.PEDCYLCOUN + "<br>Vehicle Count: " + feature.properties.VEHCOUNT + "<br>Details: " + feature.properties.SDOT_COLDE + "<br>" + feature.properties.ST_COLDESC + "<br>Date: " + feature.properties.INCDATE);
       return marker;
       }
     });
@@ -78,7 +78,7 @@
     var pedCol = L.geoJson(data3, {
       pointToLayer: function(feature, latlng){
         var marker = L.marker(latlng, {icon: Ped});
-        marker.bindPopup("Cycalist Collison Count: " + feature.properties.PEDCOUNT + "<br>Vehicle Count: " + feature.properties.VEHCOUNT + "<br>Details: " + feature.properties.SDOT_COLDE + "<br>" + feature.properties.ST_COLDESC + "<br>Date: " + feature.properties.INCDATE);
+        marker.bindPopup("Pedestrian Collison Count: " + feature.properties.PEDCOUNT + "<br>Vehicle Count: " + feature.properties.VEHCOUNT + "<br>Details: " + feature.properties.SDOT_COLDE + "<br>" + feature.properties.ST_COLDESC + "<br>Date: " + feature.properties.INCDATE);
         return marker;
       }
     });
